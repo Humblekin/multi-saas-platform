@@ -5,7 +5,7 @@ import Suppliers from './Suppliers';
 import Categories from './Categories';
 import StockMovements from './StockMovements';
 import api from '../../api';
-import './InventoryDashboard.css';
+import './inventoryDashboard.css';
 
 const InventoryDashboard = () => {
     const navigate = useNavigate();
