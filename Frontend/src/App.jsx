@@ -11,7 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // System Dashboards
 import PharmacyDashboard from './pages/pharmacy/PharmacyDashboard';
-import InventoryDashboard from './pages/inventory/InventoryDashboard';
+import InventoryDashboard from './pages/inventory/inventoryDashboard';
 import SchoolDashboard from './pages/school/SchoolDashboard';
 import OfficeDashboard from './pages/office/OfficeDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
