@@ -1,0 +1,186 @@
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #0f172a;
+    color: #fff;
+    padding: 40px 20px;
+}
+
+.payment-card {
+    background: #1e293b;
+    padding: 50px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.payment-card h2 {
+    margin-top: 0;
+    margin-bottom: 40px;
+    color: #38bdf8;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.payment-details {
+    background: #334155;
+    padding: 35px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-row span {
+    color: #94a3b8;
+}
+
+.detail-row strong {
+    color: #f1f5f9;
+    font-weight: 600;
+}
+
+.detail-row.total {
+    padding-top: 20px;
+    border-top: 2px solid #475569;
+    margin-top: 15px;
+    font-size: 1.4rem;
+}
+
+.detail-row.total strong {
+    color: #38bdf8;
+    font-weight: 700;
+}
+
+.payment-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.paystack-button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.paystack-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px -5px rgba(56, 189, 248, 0.5);
+}
+
+.paystack-button:active {
+    transform: translateY(0);
+}
+
+.btn-cancel {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: #94a3b8;
+    border: 1px solid #475569;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-cancel:hover {
+    border-color: #64748b;
+    color: #cbd5e1;
+    background: rgba(100, 116, 139, 0.1);
+}
+
+.loading {
+    text-align: center;
+    padding: 16px;
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+    .payment-card {
+        padding: 40px 30px;
+        max-width: 500px;
+    }
+
+    .payment-card h2 {
+        font-size: 1.9rem;
+        margin-bottom: 35px;
+    }
+
+    .payment-details {
+        padding: 30px;
+    }
+
+    .detail-row {
+        font-size: 1rem;
+    }
+
+    .detail-row.total {
+        font-size: 1.25rem;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .payment-container {
+        padding: 20px 15px;
+    }
+
+    .payment-card {
+        padding: 30px 20px;
+    }
+
+    .payment-card h2 {
+        font-size: 1.6rem;
+        margin-bottom: 30px;
+    }
+
+    .payment-details {
+        padding: 25px 20px;
+    }
+
+    .detail-row {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+
+    .detail-row.total {
+        font-size: 1.15rem;
+        padding-top: 16px;
+    }
+
+    .paystack-button {
+        padding: 14px;
+        font-size: 1rem;
+    }
+
+    .btn-cancel {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+}

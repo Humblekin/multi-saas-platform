@@ -1,0 +1,547 @@
+.products-page,
+.suppliers-page,
+.staff-page,
+.departments-page {
+    padding: 20px;
+    color: #fff;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-header h1 {
+    color: #f1f5f9;
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.search-input {
+    padding: 12px 16px;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #fff;
+    width: 250px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.btn-add {
+    padding: 12px 28px;
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.btn-add:hover {
+    background: #0ea5e9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -5px rgba(56, 189, 248, 0.4);
+}
+
+.entity-form,
+.drug-form,
+.sale-form,
+.product-form,
+.supplier-form,
+.student-form,
+.class-form,
+.grade-form,
+.staff-form,
+.department-form,
+.teacher-form {
+    background: #1e293b;
+    padding: 35px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    border: 1px solid #334155;
+}
+
+.form-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #38bdf8;
+    border-bottom: 2px solid #38bdf8;
+    padding-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-input,
+.drug-form input,
+.sale-form input,
+.product-form input,
+.supplier-form input,
+.student-form input,
+.class-form input,
+.grade-form input,
+.staff-form input,
+.department-form input,
+.teacher-form input,
+.form-row input,
+.form-row select {
+    padding: 14px 16px;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.drug-form input:focus,
+.sale-form input:focus,
+.product-form input:focus,
+.supplier-form input:focus,
+.student-form input:focus,
+.class-form input:focus,
+.grade-form input:focus,
+.staff-form input:focus,
+.department-form input:focus,
+.teacher-form input:focus,
+.form-row input:focus,
+.form-row select:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.05rem;
+}
+
+.btn-submit:hover {
+    background: #0ea5e9;
+    transform: translateY(-1px);
+}
+
+.entity-table,
+.drugs-table,
+.sales-table,
+.products-table,
+.suppliers-table,
+.students-table,
+.classes-table,
+.grades-table,
+.staff-table,
+.departments-table,
+.teachers-table,
+.fees-table {
+    background: #1e293b;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #334155;
+    overflow-x: auto;
+}
+
+.entity-table table,
+.drugs-table table,
+.sales-table table,
+.products-table table,
+.suppliers-table table,
+.students-table table,
+.classes-table table,
+.grades-table table,
+.staff-table table,
+.departments-table table,
+.teachers-table table,
+.fees-table table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.entity-table th,
+.entity-table td,
+thead,
+th,
+td {
+    padding: 18px 20px;
+    text-align: left;
+}
+
+.entity-table th,
+thead,
+th {
+    background: #334155;
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.entity-table td,
+td {
+    border-top: 1px solid #334155;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+}
+
+.entity-table tbody tr:hover,
+tr:hover {
+    background: rgba(56, 189, 248, 0.05);
+}
+
+.btn-view,
+.btn-edit,
+.btn-delete {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-view {
+    background: transparent;
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+}
+
+.btn-view:hover {
+    background: #38bdf8;
+    color: #0f172a;
+    transform: translateY(-1px);
+}
+
+.btn-edit {
+    background: transparent;
+    border: 1px solid #fbbf24;
+    color: #fbbf24;
+}
+
+.btn-edit:hover {
+    background: #fbbf24;
+    color: #0f172a;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.btn-delete:hover {
+    background: #ef4444;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.empty-state {
+    padding: 60px 40px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 1.05rem;
+}
+
+.loading {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .entity-form,
+    .drug-form,
+    .sale-form,
+    .product-form,
+    .supplier-form,
+    .student-form,
+    .class-form,
+    .grade-form,
+    .staff-form,
+    .department-form,
+    .teacher-form {
+        padding: 30px;
+    }
+
+    th,
+    td {
+        padding: 16px 18px;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .btn-add {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .entity-form,
+    .drug-form,
+    .sale-form,
+    .product-form,
+    .supplier-form,
+    .student-form,
+    .class-form,
+    .grade-form,
+    .staff-form,
+    .department-form,
+    .teacher-form {
+        padding: 25px 20px;
+        margin-bottom: 30px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        font-size: 1rem;
+    }
+
+    th,
+    td {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .entity-form,
+    .drug-form,
+    .sale-form,
+    .product-form,
+    .supplier-form,
+    .student-form,
+    .class-form,
+    .grade-form,
+    .staff-form,
+    .department-form,
+    .teacher-form {
+        padding: 20px 15px;
+    }
+
+    .form-input,
+    .drug-form input,
+    .sale-form input,
+    .product-form input,
+    .supplier-form input,
+    .student-form input,
+    .class-form input,
+    .grade-form input,
+    .staff-form input,
+    .department-form input,
+    .teacher-form input {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+}
+
+/* ==================== ENHANCED MOBILE TABLE STYLES ==================== */
+
+/* Mobile Table Improvements */
+@media (max-width: 768px) {
+
+    /* Add scroll indicators for tables */
+    .entity-table,
+    .drugs-table,
+    .sales-table,
+    .products-table,
+    .suppliers-table,
+    .students-table,
+    .classes-table,
+    .grades-table,
+    .staff-table,
+    .departments-table,
+    .teachers-table,
+    .fees-table {
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
+        box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Scroll indicator hint */
+    .entity-table::after,
+    .drugs-table::after,
+    .sales-table::after,
+    .products-table::after,
+    .suppliers-table::after,
+    .students-table::after,
+    .classes-table::after,
+    .grades-table::after,
+    .staff-table::after,
+    .departments-table::after,
+    .teachers-table::after,
+    .fees-table::after {
+        content: '← Scroll →';
+        position: sticky;
+        left: 50%;
+        transform: translateX(-50%);
+        display: block;
+        text-align: center;
+        padding: 10px;
+        background: rgba(56, 189, 248, 0.1);
+        color: #38bdf8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-top: 1px solid #334155;
+    }
+
+    /* Reduce table font size for mobile */
+    .entity-table th,
+    .entity-table td,
+    .drugs-table th,
+    .drugs-table td,
+    .sales-table th,
+    .sales-table td,
+    .products-table th,
+    .products-table td,
+    .suppliers-table th,
+    .suppliers-table td,
+    .students-table th,
+    .students-table td,
+    .classes-table th,
+    .classes-table td,
+    .grades-table th,
+    .grades-table td,
+    .staff-table th,
+    .staff-table td,
+    .departments-table th,
+    .departments-table td,
+    .teachers-table th,
+    .teachers-table td,
+    .fees-table th,
+    .fees-table td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        /* Prevent text wrapping */
+    }
+
+    /* Make action buttons smaller on mobile */
+    .btn-view,
+    .btn-edit,
+    .btn-delete {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        margin-right: 3px;
+    }
+
+    /* Stack action buttons if needed */
+    td .btn-view,
+    td .btn-edit,
+    td .btn-delete {
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Even smaller tables on very small screens */
+    .entity-table th,
+    .entity-table td,
+    th,
+    td {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+
+    /* Smaller buttons */
+    .btn-view,
+    .btn-edit,
+    .btn-delete {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        margin-right: 2px;
+    }
+
+    /* Adjust table minimum width for very small screens */
+    .entity-table table,
+    .drugs-table table,
+    .sales-table table,
+    .products-table table,
+    .suppliers-table table,
+    .students-table table,
+    .classes-table table,
+    .grades-table table,
+    .staff-table table,
+    .departments-table table,
+    .teachers-table table,
+    .fees-table table {
+        min-width: 500px;
+        /* Reduced from 600px */
+    }
+}

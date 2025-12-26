@@ -1,0 +1,96 @@
+.system-card {
+    background: #1e293b;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #334155;
+    transition: all 0.3s ease;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.system-card:hover {
+    border-color: #38bdf8;
+    box-shadow: 0 20px 40px -5px rgba(56, 189, 248, 0.3);
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.system-card h3 {
+    font-size: 1.75rem;
+    margin-bottom: 12px;
+    color: #f1f5f9;
+    font-weight: 700;
+}
+
+.system-card p {
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 280px;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+    .system-card {
+        padding: 35px;
+        min-height: 200px;
+    }
+
+    .card-icon {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+    }
+
+    .system-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .system-card p {
+        font-size: 0.95rem;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .system-card {
+        padding: 30px;
+        min-height: 180px;
+    }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .system-card h3 {
+        font-size: 1.35rem;
+    }
+
+    .system-card p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .system-card {
+        padding: 25px;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+    }
+
+    .system-card h3 {
+        font-size: 1.25rem;
+    }
+}

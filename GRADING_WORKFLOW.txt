@@ -1,0 +1,107 @@
+┌─────────────────────────────────────────────────────────────────────┐
+│                    SCHOOL GRADING SYSTEM WORKFLOW                   │
+└─────────────────────────────────────────────────────────────────────┘
+
+                         ┌───────────────┐
+                         │  1. SUBJECTS  │
+                         └───────┬───────┘
+                                 │
+                         Add all school subjects
+                         (Math, English, Science, etc.)
+                                 │
+                                 ▼
+                         ┌───────────────┐
+                         │  2. STUDENTS  │
+                         └───────┬───────┘
+                                 │
+                         Register all students
+                         (Name, ID, Class, Age)
+                                 │
+                                 ▼
+                    ┌────────────────────────┐
+                    │   3. ENTER GRADES      │
+                    └────────┬───────────────┘
+                             │
+                    For each student:
+                    - Select Student  ◄─── From database
+                    - Select Subject  ◄─── From subjects dropdown
+                    - Enter Score (0-100)
+                    - Grade auto-calculated (A-F)
+                    - Specify Term
+                             │
+                             ▼
+                    ┌─────────────────────┐
+                    │ 4. GENERATE REPORT  │
+                    │      CARD           │
+                    └──────────┬──────────┘
+                               │
+                    Opens report card with:
+                    - All grades for selected term
+                    - Overall average
+                    - Overall grade
+                               │
+                               ▼
+                    ┌──────────────────────────┐
+                    │ 5. FILL REPORT DETAILS   │
+                    └──────────┬───────────────┘
+                               │
+                    Add:
+                    ✓ Teacher's Remarks
+                    ✓ Principal's Remarks
+                    ✓ Teacher Signature (checkbox)
+                    ✓ Principal Signature (checkbox)
+                    ✓ Promotion Status:
+                      • Promoted
+                      • Demoted
+                      • Repeated
+                      • Withdrawn
+                    ✓ Next Class
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │ 6. SAVE REPORT CARD  │
+                    └──────────┬───────────┘
+                               │
+                    Click "💾 Save Report Card"
+                    → Saved to database
+                    → Can edit later with "Update"
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │  7. PRINT OR UPDATE  │
+                    └──────────────────────┘
+                               │
+                    Options:
+                    - Print final report card
+                    - Update remarks/signatures
+                    - Change promotion status
+
+
+═══════════════════════════════════════════════════════════════════
+
+                        KEY FEATURES
+
+    ✅ Subject Dropdown        Auto-populated from database
+    ✅ Student Selection       All registered students
+    ✅ Auto-Grade Calculation  Based on score (90+=A, 80+=B, etc.)
+    ✅ Report Persistence      Saves to database
+    ✅ Digital Signatures      Interactive checkboxes
+    ✅ Remarks Saving          Teacher & Principal remarks stored
+    ✅ Promotion Tracking      Status saved per term
+    ✅ Print-Ready Format      Professional report card layout
+    ✅ Validation              Minimum 6 subjects required
+    ✅ Update Capability       Modify saved reports
+
+═══════════════════════════════════════════════════════════════════
+
+                    GRADING SCALE
+
+    Score Range          Grade       Remark
+    ─────────────────────────────────────────
+    90 - 100             A           Excellent
+    80 - 89              B           Very Good
+    70 - 79              C           Good
+    60 - 69              D           Credit
+    Below 60             F           Fail
+
+═══════════════════════════════════════════════════════════════════

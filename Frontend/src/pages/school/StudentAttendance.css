@@ -1,0 +1,64 @@
+/* Import shared entity styles */
+@import '../../styles/SharedEntity.css';
+
+/* Specific to StudentAttendance page */
+.success-msg {
+    background: #d1e7dd;
+    color: #0f5132;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.class-select {
+    padding: 10px 16px;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+.status-options {
+    display: flex;
+    gap: 10px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option input {
+    display: none;
+}
+
+.option.selected {
+    border-color: transparent;
+    color: white;
+}
+
+.option.selected.present {
+    background: #10b981;
+}
+
+.option.selected.absent {
+    background: #ef4444;
+}
+
+.option.selected.late {
+    background: #f59e0b;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
