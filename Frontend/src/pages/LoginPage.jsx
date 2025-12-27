@@ -96,7 +96,7 @@ const LoginPage = () => {
             email: email.toLowerCase(),
           },
           {
-            timeout: 10000,
+            timeout: 60000, // 60 seconds to handle Render free tier wake-up
             headers: { "Content-Type": "application/json" },
           }
         );
