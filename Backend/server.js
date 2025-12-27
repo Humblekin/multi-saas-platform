@@ -38,6 +38,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:3000",
+      "https://totaltracks.netlify.app",
       process.env.FRONTEND_URL,
     ],
     credentials: true,
