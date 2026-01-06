@@ -368,13 +368,15 @@ router.post(
     }
 
     const { email } = req.body;
+    const sanitizedEmail = email.toLowerCase().trim();
     try {
       if (!db) return res.status(500).json({ msg: "Database not initialized" });
 
       const usersRef = db.collection("users");
-      const snapshot = await usersRef.where("email", "==", email).get();
+      const snapshot = await usersRef.where("email", "==", sanitizedEmail).get();
 
       if (snapshot.empty) {
+        console.log(`Password reset requested for non-existent email: ${sanitizedEmail}`);
         // For security, don't reveal if user doesn't exist
         return res.json({
           msg: "If an account with that email exists, a password reset link has been sent.",
@@ -420,6 +422,7 @@ router.post("/resend-verification", async (req, res) => {
     const snapshot = await usersRef.where("email", "==", email.toLowerCase()).get();
 
     if (snapshot.empty) {
+      console.log(`Verification resend failed: User with email ${email.toLowerCase()} not found in database.`);
       // Don't reveal if user doesn't exist for security
       return res.json({ msg: "If an account exists, a new verification link has been sent." });
     }
@@ -458,9 +461,10 @@ router.get("/verify-email", async (req, res) => {
 
   try {
     const usersRef = db.collection("users");
-    const snapshot = await usersRef.where("email", "==", email).get();
+    const snapshot = await usersRef.where("email", "==", email.toLowerCase()).get();
 
     if (snapshot.empty) {
+      console.log(`Email verification failed: Email ${email.toLowerCase()} not found.`);
       return res.status(400).json({ msg: "Invalid verification link" });
     }
 
