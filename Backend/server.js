@@ -13,6 +13,9 @@ dotenv.config();
 
 const app = express();
 
+// Enable trust proxy for Render (required for express-rate-limit)
+app.set('trust proxy', 1);
+
 // Body Parser MUST come first - before any middleware that accesses req.body
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
