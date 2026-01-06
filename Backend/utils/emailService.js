@@ -11,7 +11,7 @@ if (process.env.SENDGRID_API_KEY) {
   console.error('CRITICAL: SENDGRID_API_KEY is missing!');
 }
 
-const EMAIL_FROM = process.env.EMAIL_FROM || 'abdulmuminabu96@gmail.com';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'abdulraufabdulhakim71@gmail.com';
 
 export const sendVerificationEmail = async (email, token, name) => {
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${email}`;
