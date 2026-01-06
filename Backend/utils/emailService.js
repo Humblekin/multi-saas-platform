@@ -51,10 +51,13 @@ export const sendVerificationEmail = async (email, token, name) => {
       throw new Error('SendGrid API key not found');
     }
     await sgMail.send(msg);
-    console.log('Verification email sent via SendGrid');
+    console.log('Verification email sent via SendGrid to:', email);
     return true;
   } catch (error) {
-    console.error('Error sending verification email:', error.response?.body || error.message);
+    if (error.response) {
+      console.error('SendGrid Error Body:', JSON.stringify(error.response.body, null, 2));
+    }
+    console.error('Error sending verification email:', error.message);
     return false;
   }
 };
@@ -97,10 +100,13 @@ export const sendPasswordResetEmail = async (email, token, name) => {
       throw new Error('SendGrid API key not found');
     }
     await sgMail.send(msg);
-    console.log('Password reset email sent via SendGrid');
+    console.log('Password reset email sent via SendGrid to:', email);
     return true;
   } catch (error) {
-    console.error('Error sending password reset email:', error.response?.body || error.message);
+    if (error.response) {
+      console.error('SendGrid Error Body:', JSON.stringify(error.response.body, null, 2));
+    }
+    console.error('Error sending password reset email:', error.message);
     return false;
   }
 };
