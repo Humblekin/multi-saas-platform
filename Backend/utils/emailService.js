@@ -1,19 +1,31 @@
 import nodemailer from 'nodemailer';
 
 const createTransporter = () => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  // Always use fresh env vars
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
     console.error('CRITICAL: Email credentials missing in environment variables!');
+    console.log('Available Env Keys:', Object.keys(process.env).filter(k => k.includes('EMAIL')));
     return null;
   }
+
+  // Gmail is notoriously difficult on cloud IPs. 
+  // Explicitly using host and Port 465 (SSL) is often more stable than 'service' shorthand.
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: user,
+      pass: pass,
     },
     tls: {
       rejectUnauthorized: false
-    }
+    },
+    connectionTimeout: 20000, // 20 seconds
+    socketTimeout: 30000,
   });
 };
 

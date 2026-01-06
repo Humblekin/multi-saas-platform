@@ -1,15 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import "./firebaseAdmin.js";
-import dotenv from "dotenv";
 import usersRoute from "./routes/auth.js";
 import schoolRoute from "./routes/school.js";
 import pharmacyRoute from "./routes/pharmacy.js";
 import inventoryRoute from "./routes/inventory.js";
 import officeRoute from "./routes/office.js";
 import adminRoute from "./routes/admin.js";
-
-dotenv.config();
 
 const app = express();
 
