@@ -1,21 +1,29 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
+const createTransporter = () => {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('CRITICAL: Email credentials missing in environment variables!');
+    return null;
+  }
+  return nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE || 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
-});
+  });
+};
+
+const transporter = createTransporter();
 
 export const sendVerificationEmail = async (email, token, name) => {
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${email}`;
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${email}`;
 
-    const mailOptions = {
-        from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: 'Email Verification - Multi SaaS Platform',
-        html: `
+  const mailOptions = {
+    from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Email Verification - Multi SaaS Platform',
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
         <h2 style="color: #333; text-align: center;">Welcome to Multi SaaS Platform, ${name}!</h2>
         <p style="color: #555; font-size: 16px; line-height: 1.5;">
@@ -36,26 +44,29 @@ export const sendVerificationEmail = async (email, token, name) => {
         </p>
       </div>
     `,
-    };
+  };
 
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Verification email sent: ' + info.response);
-        return true;
-    } catch (error) {
-        console.error('Error sending verification email:', error);
-        return false;
+  try {
+    if (!transporter) {
+      throw new Error('Email transporter not initialized. Check your environment variables.');
     }
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Verification email sent: ' + info.response);
+    return true;
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    return false;
+  }
 };
 
 export const sendPasswordResetEmail = async (email, token, name) => {
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
 
-    const mailOptions = {
-        from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: 'Password Reset Request - Multi SaaS Platform',
-        html: `
+  const mailOptions = {
+    from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Password Reset Request - Multi SaaS Platform',
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
         <h2 style="color: #333; text-align: center;">Password Reset Request</h2>
         <p style="color: #555; font-size: 16px; line-height: 1.5;">
@@ -76,14 +87,17 @@ export const sendPasswordResetEmail = async (email, token, name) => {
         </p>
       </div>
     `,
-    };
+  };
 
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Password reset email sent: ' + info.response);
-        return true;
-    } catch (error) {
-        console.error('Error sending password reset email:', error);
-        return false;
+  try {
+    if (!transporter) {
+      throw new Error('Email transporter not initialized. Check your environment variables.');
     }
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Password reset email sent: ' + info.response);
+    return true;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    return false;
+  }
 };
