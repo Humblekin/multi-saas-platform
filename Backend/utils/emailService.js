@@ -1,42 +1,27 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
-const createTransporter = () => {
-  // Always use fresh env vars
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
+dotenv.config();
 
-  if (!user || !pass) {
-    console.error('CRITICAL: Email credentials missing in environment variables!');
-    console.log('Available Env Keys:', Object.keys(process.env).filter(k => k.includes('EMAIL')));
-    return null;
-  }
+// Initialize SendGrid with API Key
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  console.log('SendGrid API initialized');
+} else {
+  console.error('CRITICAL: SENDGRID_API_KEY is missing!');
+}
 
-  // Gmail is notoriously difficult on cloud IPs. 
-  // Explicitly using host and Port 465 (SSL) is often more stable than 'service' shorthand.
-  return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Port 587 uses STARTTLS
-    auth: {
-      user: user,
-      pass: pass,
-    },
-    tls: {
-      rejectUnauthorized: false
-    },
-    connectionTimeout: 20000,
-    socketTimeout: 30000,
-  });
-};
-
-const transporter = createTransporter();
+const EMAIL_FROM = process.env.EMAIL_FROM || 'abdulmuminabu96@gmail.com';
 
 export const sendVerificationEmail = async (email, token, name) => {
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${email}`;
 
-  const mailOptions = {
-    from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
+  const msg = {
     to: email,
+    from: {
+      email: EMAIL_FROM,
+      name: 'Multi SaaS Platform'
+    },
     subject: 'Email Verification - Multi SaaS Platform',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -62,14 +47,14 @@ export const sendVerificationEmail = async (email, token, name) => {
   };
 
   try {
-    if (!transporter) {
-      throw new Error('Email transporter not initialized. Check your environment variables.');
+    if (!process.env.SENDGRID_API_KEY) {
+      throw new Error('SendGrid API key not found');
     }
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Verification email sent: ' + info.response);
+    await sgMail.send(msg);
+    console.log('Verification email sent via SendGrid');
     return true;
   } catch (error) {
-    console.error('Error sending verification email:', error);
+    console.error('Error sending verification email:', error.response?.body || error.message);
     return false;
   }
 };
@@ -77,9 +62,12 @@ export const sendVerificationEmail = async (email, token, name) => {
 export const sendPasswordResetEmail = async (email, token, name) => {
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
 
-  const mailOptions = {
-    from: `"Multi SaaS Platform" <${process.env.EMAIL_USER}>`,
+  const msg = {
     to: email,
+    from: {
+      email: EMAIL_FROM,
+      name: 'Multi SaaS Platform'
+    },
     subject: 'Password Reset Request - Multi SaaS Platform',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -105,14 +93,14 @@ export const sendPasswordResetEmail = async (email, token, name) => {
   };
 
   try {
-    if (!transporter) {
-      throw new Error('Email transporter not initialized. Check your environment variables.');
+    if (!process.env.SENDGRID_API_KEY) {
+      throw new Error('SendGrid API key not found');
     }
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Password reset email sent: ' + info.response);
+    await sgMail.send(msg);
+    console.log('Password reset email sent via SendGrid');
     return true;
   } catch (error) {
-    console.error('Error sending password reset email:', error);
+    console.error('Error sending password reset email:', error.response?.body || error.message);
     return false;
   }
 };
