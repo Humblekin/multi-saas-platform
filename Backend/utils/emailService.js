@@ -15,8 +15,8 @@ const createTransporter = () => {
   // Explicitly using host and Port 465 (SSL) is often more stable than 'service' shorthand.
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // Port 587 uses STARTTLS
     auth: {
       user: user,
       pass: pass,
@@ -24,7 +24,7 @@ const createTransporter = () => {
     tls: {
       rejectUnauthorized: false
     },
-    connectionTimeout: 20000, // 20 seconds
+    connectionTimeout: 20000,
     socketTimeout: 30000,
   });
 };
