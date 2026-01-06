@@ -397,7 +397,11 @@ router.post(
       });
 
       // Send email
-      await sendPasswordResetEmail(email, resetToken, userData.name);
+      const emailSent = await sendPasswordResetEmail(email, resetToken, userData.name);
+
+      if (!emailSent) {
+        return res.status(500).json({ msg: "Failed to send reset email. Please try again later." });
+      }
 
       res.json({
         msg: "If an account with that email exists, a password reset link has been sent.",
@@ -442,7 +446,11 @@ router.post("/resend-verification", async (req, res) => {
     });
 
     // Send email
-    await sendVerificationEmail(email, newVerificationToken, userData.name);
+    const emailSent = await sendVerificationEmail(email, newVerificationToken, userData.name);
+
+    if (!emailSent) {
+      return res.status(500).json({ msg: "Failed to send verification email. Please try again later." });
+    }
 
     res.json({ msg: "Verification email resent successfully." });
   } catch (err) {
