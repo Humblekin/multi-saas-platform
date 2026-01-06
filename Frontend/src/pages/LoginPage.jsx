@@ -13,6 +13,8 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [remainingAttempts, setRemainingAttempts] = useState(null);
+  const [isUnverified, setIsUnverified] = useState(false);
+  const [resendStatus, setResendStatus] = useState(""); // "", "loading", "sent", "error"
   const navigate = useNavigate();
 
   const { email, password } = formData;
@@ -135,6 +137,9 @@ const LoginPage = () => {
           setRemainingAttempts(data.minutesRemaining);
         } else if (err.response && err.response.data) {
           setError(err.response.data.msg || "Login failed");
+          if (err.response.data.isUnverified) {
+            setIsUnverified(true);
+          }
         } else if (err.code === "ECONNABORTED") {
           setError("Request timed out. Please try again.");
         } else {
@@ -147,18 +152,55 @@ const LoginPage = () => {
     [email, password]
   );
 
+  const handleResendEmail = async () => {
+    setResendStatus("loading");
+    try {
+      await api.post("/resend-verification", { email: email.toLowerCase() });
+      setResendStatus("sent");
+      setError("");
+    } catch (err) {
+      console.error("Resend error:", err);
+      setResendStatus("error");
+      setError(err.response?.data?.msg || "Failed to resend verification email");
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
         <h2>Welcome Back</h2>
         <p>Login to your account</p>
         {error && (
-          <div className="error-msg">
+          <div className="error-msg" style={{ padding: "12px" }}>
             {error}
             {remainingAttempts && (
               <div style={{ fontSize: "0.9em", marginTop: "5px" }}>
                 Try again in {remainingAttempts} minute
                 {remainingAttempts !== 1 ? "s" : ""}
+              </div>
+            )}
+            {isUnverified && (
+              <div style={{ marginTop: "10px" }}>
+                {resendStatus === "sent" ? (
+                  <span style={{ color: "#4CAF50", fontWeight: "bold" }}>Email resent! Check your inbox.</span>
+                ) : (
+                  <button
+                    onClick={handleResendEmail}
+                    className="resend-btn"
+                    disabled={resendStatus === "loading"}
+                    style={{
+                      background: "none",
+                      border: "1px solid #ff4d4d",
+                      color: "#ff4d4d",
+                      padding: "5px 10px",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "0.85em"
+                    }}
+                  >
+                    {resendStatus === "loading" ? "Sending..." : "Resend Verification Email"}
+                  </button>
+                )}
               </div>
             )}
           </div>

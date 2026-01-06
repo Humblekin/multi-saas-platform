@@ -109,6 +109,8 @@ app.use("/api", limiter);
 app.use("/api/login", authLimiter);
 app.use("/api/register", authLimiter);
 app.use("/api/forgot-password", authLimiter);
+app.use("/api/resend-verification", authLimiter);
+app.use("/api/verify-email", authLimiter);
 
 // Routes
 app.use("/api", usersRoute);

@@ -19,15 +19,6 @@ const ForgotPasswordPage = () => {
         try {
             const res = await api.post("/forgot-password", { email });
             setSuccess(res.data.msg);
-
-            // Store reset token in sessionStorage for the reset password page
-            sessionStorage.setItem('resetToken', res.data.resetToken);
-            sessionStorage.setItem('resetEmail', res.data.email);
-
-            // Redirect to reset password page after 2 seconds
-            setTimeout(() => {
-                navigate('/reset-password');
-            }, 2000);
         } catch (err) {
             setError(err.response?.data?.msg || 'Failed to process request');
         } finally {

@@ -12,6 +12,7 @@ const RegisterPage = () => {
         password: '',
     });
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
     const { name, email, password } = formData;
@@ -30,14 +31,12 @@ const RegisterPage = () => {
             const firebaseToken = await fbUser.getIdToken();
 
             // 3. Send name and token to backend to create Firestore record
-            const res = await api.post('/register', {
+            await api.post('/register', {
                 name,
                 token: firebaseToken
             });
 
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
-            navigate('/dashboard');
+            setSuccess(true);
         } catch (err) {
             console.error('Registration error detail:', err);
             if (err.code === 'auth/email-already-in-use') {
@@ -51,6 +50,30 @@ const RegisterPage = () => {
             }
         }
     };
+
+    if (success) {
+        return (
+            <div className="auth-container">
+                <div className="auth-card">
+                    <h2>Registration Successful!</h2>
+                    <div className="success-msg" style={{
+                        backgroundColor: '#d4edda',
+                        color: '#155724',
+                        padding: '20px',
+                        borderRadius: '8px',
+                        marginBottom: '20px',
+                        textAlign: 'center'
+                    }}>
+                        <p>We've sent a verification email to <strong>{email}</strong>.</p>
+                        <p>Please check your inbox and click the verification link to activate your account.</p>
+                    </div>
+                    <p className="auth-footer">
+                        Once verified, you can <Link to="/login">Login here</Link>
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="auth-container">

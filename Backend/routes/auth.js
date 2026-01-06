@@ -11,6 +11,8 @@ import {
   validateTokenStructure,
   logSecurityEvent,
 } from "../middleware/security.js";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/emailService.js";
+import crypto from "crypto";
 // Register - Enhanced Security
 router.post(
   "/register",
@@ -107,10 +109,14 @@ router.post(
         trialStartDate.getTime() + 30 * 24 * 60 * 60 * 1000
       );
 
+      const verificationToken = crypto.randomBytes(32).toString("hex");
+
       const newUser = {
         name: sanitizedName,
         email: sanitizedEmail,
         role: "user",
+        isVerified: false,
+        verificationToken,
         subscription: {
           isActive: true,
           planType: "All", // 'All' means access to all systems: School, Pharmacy, Inventory, Office
@@ -126,6 +132,9 @@ router.post(
 
       // Use the Firebase UID as the Firestore document ID
       await usersRef.doc(uid).set(newUser);
+
+      // Send verification email
+      await sendVerificationEmail(sanitizedEmail, verificationToken, sanitizedName);
 
       // Clear any previous login attempts
       await clearLoginAttempts(sanitizedEmail);
@@ -275,6 +284,19 @@ router.post(
 
       const user = userDoc.data();
 
+      // Check if email is verified
+      if (!user.isVerified) {
+        await logSecurityEvent("login_unverified_email", {
+          uid,
+          email: sanitizedEmail,
+          ipAddress: req.ip,
+        });
+        return res.status(403).json({
+          msg: "Please verify your email before logging in. Check your inbox for the verification link.",
+          isUnverified: true
+        });
+      }
+
       const payload = {
         user: {
           id: uid,
@@ -335,7 +357,7 @@ router.post(
   }
 );
 
-// Forgot Password - Generate reset token
+// Forgot Password - Generate reset token and send email
 router.post(
   "/forgot-password",
   [check("email", "Please include a valid email").isEmail()],
@@ -353,18 +375,18 @@ router.post(
       const snapshot = await usersRef.where("email", "==", email).get();
 
       if (snapshot.empty) {
-        return res
-          .status(404)
-          .json({ msg: "No account with that email address exists." });
+        // For security, don't reveal if user doesn't exist
+        return res.json({
+          msg: "If an account with that email exists, a password reset link has been sent.",
+        });
       }
 
       const userDoc = snapshot.docs[0];
       const userId = userDoc.id;
+      const userData = userDoc.data();
 
-      // Generate reset token (simple approach without email)
-      const resetToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
+      // Generate reset token
+      const resetToken = crypto.randomBytes(32).toString("hex");
 
       // Store token and expiry in database
       await usersRef.doc(userId).update({
@@ -372,10 +394,11 @@ router.post(
         resetPasswordExpires: Date.now() + 3600000, // 1 hour
       });
 
+      // Send email
+      await sendPasswordResetEmail(email, resetToken, userData.name);
+
       res.json({
-        msg: "Password reset token generated successfully",
-        resetToken,
-        email: email,
+        msg: "If an account with that email exists, a password reset link has been sent.",
       });
     } catch (err) {
       console.error(err.message);
@@ -383,6 +406,86 @@ router.post(
     }
   }
 );
+
+// Resend Verification Email
+router.post("/resend-verification", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ msg: "Email is required" });
+  }
+
+  try {
+    const usersRef = db.collection("users");
+    const snapshot = await usersRef.where("email", "==", email.toLowerCase()).get();
+
+    if (snapshot.empty) {
+      // Don't reveal if user doesn't exist for security
+      return res.json({ msg: "If an account exists, a new verification link has been sent." });
+    }
+
+    const userDoc = snapshot.docs[0];
+    const userData = userDoc.data();
+
+    if (userData.isVerified) {
+      return res.status(400).json({ msg: "Email already verified" });
+    }
+
+    // Generate new token
+    const newVerificationToken = crypto.randomBytes(32).toString("hex");
+
+    await usersRef.doc(userDoc.id).update({
+      verificationToken: newVerificationToken,
+    });
+
+    // Send email
+    await sendVerificationEmail(email, newVerificationToken, userData.name);
+
+    res.json({ msg: "Verification email resent successfully." });
+  } catch (err) {
+    console.error("Resend verification error:", err);
+    res.status(500).json({ msg: "Server error during resend" });
+  }
+});
+
+// Email Verification Route
+router.get("/verify-email", async (req, res) => {
+  const { email, token } = req.query;
+
+  if (!email || !token) {
+    return res.status(400).json({ msg: "Missing email or token" });
+  }
+
+  try {
+    const usersRef = db.collection("users");
+    const snapshot = await usersRef.where("email", "==", email).get();
+
+    if (snapshot.empty) {
+      return res.status(400).json({ msg: "Invalid verification link" });
+    }
+
+    const userDoc = snapshot.docs[0];
+    const userData = userDoc.data();
+
+    if (userData.isVerified) {
+      return res.status(200).json({ msg: "Email already verified" });
+    }
+
+    if (userData.verificationToken !== token) {
+      return res.status(400).json({ msg: "Invalid verification token" });
+    }
+
+    await usersRef.doc(userDoc.id).update({
+      isVerified: true,
+      verificationToken: admin.firestore.FieldValue.delete(),
+    });
+
+    res.json({ msg: "Email verified successfully. You can now log in." });
+  } catch (err) {
+    console.error("Verification error:", err);
+    res.status(500).json({ msg: "Server error during verification" });
+  }
+});
 
 // Reset Password - Validate token and update password
 router.post(
@@ -403,40 +506,27 @@ router.post(
     try {
       if (!db) return res.status(500).json({ msg: "Database not initialized" });
 
-      // Verify token
-      let decoded;
-      try {
-        decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
-      } catch (err) {
+      // Find user with valid token
+      const usersRef = db.collection("users");
+      const snapshot = await usersRef
+        .where("resetPasswordToken", "==", resetToken)
+        .where("resetPasswordExpires", ">", Date.now())
+        .get();
+
+      if (snapshot.empty) {
         return res.status(400).json({ msg: "Invalid or expired reset token" });
       }
 
-      // Find user with valid token
-      const usersRef = db.collection("users");
-      const userDoc = await usersRef.doc(decoded.userId).get();
-
-      if (!userDoc.exists) {
-        return res.status(400).json({ msg: "User not found" });
-      }
-
-      const user = userDoc.data();
-
-      if (
-        user.resetPasswordToken !== resetToken ||
-        user.resetPasswordExpires < Date.now()
-      ) {
-        return res
-          .status(400)
-          .json({ msg: "Password reset token is invalid or has expired" });
-      }
+      const userDoc = snapshot.docs[0];
+      const userId = userDoc.id;
 
       // Update password in Firebase Auth
-      await admin.auth().updateUser(decoded.userId, {
+      await admin.auth().updateUser(userId, {
         password: newPassword,
       });
 
       // Clear reset token fields in Firestore
-      await usersRef.doc(decoded.userId).update({
+      await usersRef.doc(userId).update({
         resetPasswordToken: admin.firestore.FieldValue.delete(),
         resetPasswordExpires: admin.firestore.FieldValue.delete(),
       });

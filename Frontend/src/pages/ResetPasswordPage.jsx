@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from '../api';
 import '../styles/Forms.css';
 
@@ -14,18 +14,29 @@ const ResetPasswordPage = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
+    const location = useLocation();
+
     useEffect(() => {
-        // Get reset token and email from sessionStorage
-        const token = sessionStorage.getItem('resetToken');
-        const userEmail = sessionStorage.getItem('resetEmail');
+        // Get reset token and email from URL parameters
+        const query = new URLSearchParams(location.search);
+        const token = query.get('token');
+        const userEmail = query.get('email');
 
         if (!token) {
-            setError('Invalid reset link. Please request a new password reset.');
+            // Check session storage as fallback (for backward compatibility during migration)
+            const sessionToken = sessionStorage.getItem('resetToken');
+            if (!sessionToken) {
+                setError('Invalid or missing reset token. Please request a new password reset.');
+            }
         }
+
         if (userEmail) {
             setEmail(userEmail);
+        } else {
+            const sessionEmail = sessionStorage.getItem('resetEmail');
+            if (sessionEmail) setEmail(sessionEmail);
         }
-    }, []);
+    }, [location]);
 
     const { newPassword, confirmPassword } = formData;
 
@@ -52,7 +63,9 @@ const ResetPasswordPage = () => {
         setLoading(true);
 
         try {
-            const resetToken = sessionStorage.getItem('resetToken');
+            const query = new URLSearchParams(location.search);
+            const resetToken = query.get('token') || sessionStorage.getItem('resetToken');
+
             const res = await api.post("/reset-password", {
                 resetToken,
                 newPassword
