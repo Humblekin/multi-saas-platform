@@ -110,3 +110,56 @@ export const sendPasswordResetEmail = async (email, token, name) => {
     return false;
   }
 };
+
+export const sendSubscriptionEmail = async (email, name, planType, endDate) => {
+  const msg = {
+    to: email,
+    from: {
+      email: EMAIL_FROM,
+      name: 'Multi SaaS Platform'
+    },
+    subject: `Thank You for Subscribing! - ${planType}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+        <h2 style="color: #333; text-align: center;">Subscription Confirmed!</h2>
+        <p style="color: #555; font-size: 16px; line-height: 1.5;">
+          Hello ${name},
+        </p>
+        <p style="color: #555; font-size: 16px; line-height: 1.5;">
+          Thank you so much for subscribing to the <strong>${planType}</strong> system! We are thrilled to have you on board and are committed to helping you manage your ${planType.toLowerCase()} operations efficiently.
+        </p>
+        <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #007bff;">
+          <h3 style="margin-top: 0; color: #007bff;">Subscription Details</h3>
+          <p style="margin: 8px 0;"><strong>System Activated:</strong> ${planType}</p>
+          <p style="margin: 8px 0;"><strong>Duration:</strong> 1 Year</p>
+          <p style="margin: 8px 0;"><strong>Expiry Date:</strong> ${new Date(endDate).toLocaleDateString()}</p>
+        </div>
+        <p style="color: #555; font-size: 16px; line-height: 1.5;">
+          Your account is now fully active with all premium features unlocked. If you have any questions or need assistance setting things up, our support team is always here for you.
+        </p>
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${process.env.FRONTEND_URL}/login" style="background-color: #4CAF50; color: white; padding: 14px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Access My Dashboard</a>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+        <p style="color: #888; font-size: 13px; text-align: center;">
+          Thank you for your trust and for being a valued part of our community.
+          <br><br>
+          Best Regards,<br>
+          <strong>The Multi SaaS Team</strong>
+        </p>
+      </div>
+    `,
+  };
+
+  try {
+    if (!process.env.SENDGRID_API_KEY) {
+      throw new Error('SendGrid API key not found');
+    }
+    await sgMail.send(msg);
+    console.log('Subscription activation email sent to:', email);
+    return true;
+  } catch (error) {
+    console.error('Error sending subscription email:', error.message);
+    return false;
+  }
+};

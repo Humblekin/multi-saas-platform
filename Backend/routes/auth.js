@@ -115,7 +115,7 @@ router.post(
         name: sanitizedName,
         email: sanitizedEmail,
         role: "user",
-        isVerified: false,
+        isVerified: true,
         verificationToken,
         subscription: {
           isActive: true,
@@ -133,8 +133,8 @@ router.post(
       // Use the Firebase UID as the Firestore document ID
       await usersRef.doc(uid).set(newUser);
 
-      // Send verification email
-      await sendVerificationEmail(sanitizedEmail, verificationToken, sanitizedName);
+      // Verification email disabled as per user request
+      // await sendVerificationEmail(sanitizedEmail, verificationToken, sanitizedName);
 
       // Clear any previous login attempts
       await clearLoginAttempts(sanitizedEmail);
@@ -284,7 +284,8 @@ router.post(
 
       const user = userDoc.data();
 
-      // Check if email is verified
+      /* 
+      // Check if email is verified - Disabled as per user request
       if (!user.isVerified) {
         await logSecurityEvent("login_unverified_email", {
           uid,
@@ -296,6 +297,7 @@ router.post(
           isUnverified: true
         });
       }
+      */
 
       const payload = {
         user: {

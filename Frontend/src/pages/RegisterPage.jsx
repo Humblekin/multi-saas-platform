@@ -64,11 +64,11 @@ const RegisterPage = () => {
                         marginBottom: '20px',
                         textAlign: 'center'
                     }}>
-                        <p>We've sent a verification email to <strong>{email}</strong>.</p>
-                        <p>Please check your inbox and click the verification link to activate your account.</p>
+                        <p>Your account has been created successfully!</p>
+                        <p>You can now proceed to login.</p>
                     </div>
                     <p className="auth-footer">
-                        Once verified, you can <Link to="/login">Login here</Link>
+                        <Link to="/login" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none', color: 'white' }}>Login Now</Link>
                     </p>
                 </div>
             </div>

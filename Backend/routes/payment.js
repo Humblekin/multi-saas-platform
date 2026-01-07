@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import auth from '../middleware/auth.js';
 import { db } from '../firebaseAdmin.js';
+import { sendSubscriptionEmail } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -40,6 +41,10 @@ router.post('/verify', auth, async (req, res) => {
             };
 
             await docRef.update({ subscription });
+
+            // Send confirmation email
+            const userData = doc.data();
+            await sendSubscriptionEmail(userData.email, userData.name, planType, endDate);
 
             res.json({ msg: 'Subscription successful', subscription });
         } else {
